@@ -21,6 +21,10 @@ export const Label = styled.label`
   font-size: 16px;
   display: block;
   color: #333;
+
+  width: 100%;
+
+  text-align: start;
 `;
 
 export const StyledInput = styled.input`
@@ -61,4 +65,6 @@ export const ErrorMessage = styled.div`
   font-weight: 600;
 
   font-size: 14px;
+
+  width: 100%;
 `;

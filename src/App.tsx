@@ -1,16 +1,21 @@
-import isValidProp from "@emotion/is-prop-valid";
-import { BrowserRouter as Router } from "react-router-dom";
-import { StyleSheetManager } from "styled-components";
+import 'react-toastify/dist/ReactToastify.css';
 
-import AppRoutes from "./routes";
+import isValidProp from '@emotion/is-prop-valid';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { StyleSheetManager } from 'styled-components';
+
+import { AuthProvider } from './context/AuthContext';
+import AppRoutes from './routes';
 
 const App = () => {
   return (
     <Router>
       <StyleSheetManager shouldForwardProp={(prop) => isValidProp(prop)}>
-        {/* <AuthUserProvider> */}
-        <AppRoutes />
-        {/* </AuthUserProvider> */}
+        <AuthProvider>
+          <AppRoutes />
+          <ToastContainer />
+        </AuthProvider>
       </StyleSheetManager>
     </Router>
   );

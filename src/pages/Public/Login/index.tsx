@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
-
 import InputForm from "../../../components/InputForm";
 import { Container, ContainerSignUp, Content } from "./styles";
 import CustomButton from "../../../components/CustomButton";
-import api from "../../../services/api";
+import { useAuth } from "../../../context/AuthContext";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const Login: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const { login } = useAuth();
 
   const schema = yup.object().shape({
     email: yup.string().email("Email inválido").required("Email é obrigatório"),
@@ -26,18 +26,7 @@ const Login = () => {
 
     try {
       await schema.validate({ email, password }, { abortEarly: false });
-
-      try {
-        const login = {
-          email: email,
-          password: password,
-        };
-
-        await api.post("/auth/login", login);
-        console.log(login);
-      } catch (error) {
-        console.log(error);
-      }
+      await login(email, password);
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const newErrors: { [key: string]: string } = {};
@@ -47,6 +36,8 @@ const Login = () => {
           }
         });
         setErrors(newErrors);
+      } else {
+        setErrors({ global: "Credenciais inválidas. Tente novamente." });
       }
     }
   };
@@ -84,9 +75,7 @@ const Login = () => {
             </Link>
           </ContainerSignUp>
 
-          <CustomButton onClick={() => {}} type="submit">
-            Entrar
-          </CustomButton>
+          <CustomButton type="submit">Entrar</CustomButton>
         </form>
       </Content>
     </Container>
